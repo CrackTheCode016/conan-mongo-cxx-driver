@@ -7,13 +7,13 @@ import re
 class MongoCxxConan(ConanFile):
     name = "mongo-cxx-driver"
     version = "3.4.0"
-    url = "http://github.com/bincrafters/conan-mongo-cxx-driver"
+    url = "https://github.com/CrackTheCode016/conan-mongo-cxx-driver"
     description = "C++ Driver for MongoDB"
     license = "https://github.com/mongodb/mongo-cxx-driver/blob/{0}/LICENSE".format(
         version)
     settings = "os", "compiler", "arch", "build_type"
     options = {"shared": [True, False]}
-    default_options = {'shared': 'False'}
+    default_options = {'shared': 'True'}
     requires = 'mongo-c-driver/[1.16.1]@bincrafters/stable'
     generators = "cmake"
 
