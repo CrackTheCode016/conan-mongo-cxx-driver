@@ -12,7 +12,7 @@ class MongoCxxConan(ConanFile):
     license = "https://github.com/mongodb/mongo-cxx-driver/blob/{0}/LICENSE".format(
         version)
     settings = "os", "compiler", "arch", "build_type"
-    options = {"shared": [True, False]}
+    options = {"shared": [True]}
     default_options = {'shared': 'True'}
     requires = 'mongo-c-driver/[1.16.1]@bincrafters/stable'
     generators = "cmake"
@@ -27,34 +27,6 @@ class MongoCxxConan(ConanFile):
         conan_magic_lines = '''project(MONGO_CXX_DRIVER LANGUAGES CXX)
         include(../conanbuildinfo.cmake)
         conan_basic_setup()
-        # include(CheckCXXCompilerFlag)
-        # check_cxx_compiler_flag(-std=c++17 HAVE_FLAG_STD_CXX17)
-        # if(HAVE_FLAG_STD_CXX17)
-        #     message(STATUS USING C++17!)
-        #     set(CMAKE_CXX_STANDARD 17)
-        #     set(BSONCXX_POLY_USE_MNMLSTC 0)
-        #     set(BSONCXX_POLY_USE_STD_EXPERIMENTAL 0)
-        #     set(BSONCXX_POLY_USE_BOOST 0)
-        #     set(BSONCXX_POLY_USE_STD 1)
-        # else()
-        #     check_cxx_compiler_flag(-std=c++14 HAVE_FLAG_STD_CXX14)
-        #     if(HAVE_FLAG_STD_CXX14)
-        #         message(STATUS USING C++14!)
-        #         set(CMAKE_CXX_STANDARD 14)
-        #         set(BSONCXX_POLY_USE_MNMLSTC 0)
-        #         set(BSONCXX_POLY_USE_STD_EXPERIMENTAL 1)
-        #         set(BSONCXX_POLY_USE_BOOST 0)
-        #         set(BSONCXX_POLY_USE_STD 0)
-        #     else()
-        #         message(FATAL_ERROR "MongoCXX requires at least C++14")
-        #     endif()
-        # endif()
-        # set(CMAKE_CXX_STANDARD_REQUIRED ON)
-        # set(CMAKE_CXX_EXTENSIONS OFF)
-        set(BSONCXX_POLY_USE_MNMLSTC 1)
-        set(BSONCXX_POLY_USE_STD_EXPERIMENTAL 0)
-        set(BSONCXX_POLY_USE_BOOST 0)
-        set(BSONCXX_POLY_USE_STD 0)
         '''
 
         cmake_file = "sources/CMakeLists.txt"
@@ -63,6 +35,7 @@ class MongoCxxConan(ConanFile):
         content = tools.load(cmake_file)
 
         cmake = CMake(self)
+        cmake.definitions["BSONCXX_POLY_USE_BOOST"] = 1
         if self.settings.compiler == 'Visual Studio':
             # required for Windows.
             cmake.definitions["BSONCXX_POLY_USE_BOOST"] = 1
